@@ -87,7 +87,7 @@ namespace AppLoc.Editor {
                 else {
                     string data = response.data;
 
-                    StringBuilder hashBuilder = new();
+                    StringBuilder hashBuilder = new StringBuilder();
 
                     using (SHA256 sha256 = SHA256.Create()) {
                         byte[] result = sha256.ComputeHash(Encoding.UTF8.GetBytes(data));
@@ -99,8 +99,9 @@ namespace AppLoc.Editor {
 
                     string hash = hashBuilder.ToString();
 
-                    LocalizationsObject currentLocalizations = AssetDatabase.LoadAssetAtPath<LocalizationsObject>(LocalizationManager.LocalizationsObjectPath);
-                    
+                    LocalizationsObject currentLocalizations =
+                        AssetDatabase.LoadAssetAtPath<LocalizationsObject>(LocalizationManager.LocalizationsObjectPath);
+
                     if (currentLocalizations != null && currentLocalizations.hash == hash) {
                         SetStatus("Nothing has changed since the last version.", MessageType.Info);
                     }
@@ -110,7 +111,8 @@ namespace AppLoc.Editor {
 
                             Localization apiLocalization = JsonUtility.FromJson<Localization>(data);
 
-                            Dictionary<string, List<AppLoc.Localization.KeyValuePair>> localizations = new();
+                            Dictionary<string, List<AppLoc.Localization.KeyValuePair>> localizations =
+                                new Dictionary<string, List<AppLoc.Localization.KeyValuePair>>();
 
                             foreach (Localization.LocalizationKey key in apiLocalization.keys) {
                                 foreach (Localization.LocalizationKey.LocalizationValue localization in key.localizations) {
@@ -128,7 +130,7 @@ namespace AppLoc.Editor {
                             LocalizationsObject newLocalization = CreateInstance<LocalizationsObject>();
 
                             newLocalization.hash = hash;
-                            
+
                             newLocalization.localizations = new AppLoc.Localization[localizations.Keys.Count];
 
                             for (int i = 0; i < localizations.Keys.Count; i++) {
