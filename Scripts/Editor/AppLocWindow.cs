@@ -22,7 +22,7 @@ namespace AppLoc.Editor {
             _window = GetWindow<AppLocWindow>(true, nameof(AppLoc));
         }
 
-        private static readonly string PreferencesLocation = Path.Combine(Application.dataPath, "../ProjectSettings/app-translation-prefs.json");
+        private static readonly string PreferencesLocation = Path.Combine(Application.dataPath, "../ProjectSettings/apploc-prefs.json");
         private static Preferences _preferences;
 
         private MessageType _statusType;
