@@ -1,6 +1,6 @@
 # AppLoc for Unity
 
-[apploc.dev](https://apploc.dev) plugin for Unity, which provides seamless localization management for your Unity projects.
+The [apploc.dev](https://apploc.dev) plugin for Unity provides seamless localization management for your projects.
 
 ## Installation
 
