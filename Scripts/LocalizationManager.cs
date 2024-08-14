@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace AppLoc {
             Debug.Log("[" + nameof(AppLoc) + "] " + text);
         }
 
-        public static string[] GetLocalizationCodes() => LocalizationsObject.localizations.Select(e => e.code).ToArray();
+        public static ReadOnlyCollection<string> LocalizationCodes { get; private set; }
 
         public static void SetLocalization(string code) {
             _currentLocalization = LocalizationsObject.localizations.First(e => e.code == code);
@@ -31,8 +32,10 @@ namespace AppLoc {
         static LocalizationManager() {
             LocalizationsObject = AssetDatabase.LoadAssetAtPath<LocalizationsObject>(LocalizationsObjectPath);
 
-            string[] codes = GetLocalizationCodes();
-            string code = codes.Contains("EN") ? "EN" : codes[0];
+            LocalizationCodes = new ReadOnlyCollection<string>(
+                LocalizationsObject.localizations.Select(e => e.code).ToArray()
+            );
+            string code = LocalizationCodes.Contains("EN") ? "EN" : LocalizationCodes[0];
 
             Log("loaded localizations from '" + LocalizationsObjectPath + "', default localization: '" + code + "'");
 
