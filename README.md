@@ -4,10 +4,11 @@ The [apploc.dev](https://apploc.dev) plugin for Unity provides seamless localiza
 
 ## Installation
 
--   Open Package Manager
--   Add package from git URL:
-    <code>https://github.com/apploc-dev/unity.git</code>
-    > **Note:** This package has been tested on Unity version 2020.3.46 and above. Other versions may work but are not officially supported.
+- Open Package Manager
+- Add package from git URL:
+  <code>https://github.com/apploc-dev/unity.git</code>
+  > **Note:** This package has been tested on Unity version 2022.3.28 and above. Other versions may work but are not
+  officially supported.
 
 ## Usage
 
@@ -15,9 +16,12 @@ The [apploc.dev](https://apploc.dev) plugin for Unity provides seamless localiza
 
 The plugin window can be opened by clicking on **Window > AppLoc**.
 
-Start by pasting your project ID and secret key into the respective fields. These will be automatically saved to <code>ProjectSettings/apploc-prefs.json</code>.
+Start by pasting your project ID and secret key into the respective fields. These will be automatically saved to <code>
+ProjectSettings/apploc-prefs.json</code>.
 
-> **Important:** The project secret only grants access to the contents of the project — it does not expose or allow access to any project members or their details. This means you can safely add apploc-prefs.json to your version control system without worrying about sensitive information being compromised.
+> **Important:** The project secret only grants access to the contents of the project — it does not expose or allow
+> access to any project members or their details. This means you can safely add apploc-prefs.json to your version
+> control system without worrying about sensitive information being compromised.
 
 Click the **Update** button to automatically update or create the <code>Assets/ATLocalizationsObject.asset</code> file.
 
@@ -27,7 +31,9 @@ Click the **Update** button to automatically update or create the <code>Assets/A
 
 ### Initialization and localization selection
 
-Initialization is automatic. By default, the manager attempts to find the localization code "EN". If "EN" does not exist, it selects the first localization by index. You can view localization indices in the <code>Assets/ATLocalizationsObject.asset</code> ScriptableObject.
+Initialization is automatic. By default, the manager attempts to find the localization code "EN". If "EN" does not
+exist, it selects the first localization by index. You can view localization indices in the <code>
+Assets/ATLocalizationsObject.asset</code> ScriptableObject.
 
 ```csharp
 using UnityEngine;
@@ -59,7 +65,14 @@ public class GameManager : MonoBehaviour {
 
 ### Localizable objects
 
-To create a localizable object, inherit from the <code>AbstractLocalizable</code> class and implement the <code>Localize()</code> method. If necessary, you can override <code>OnEnable()</code> (ensure you call <code>base.OnEnable()</code> after your code).
+Built-in localizable objects:
+
+- [LocalizableTextMeshPro](./Scripts/Localizables/LocalizableTextMeshPro.cs) for TMPro.TMP_Text
+- [LocalizableLegacyText](./Scripts/Localizables/LocalizableLegacyText.cs) for UnityEngine.UI.Text
+
+To create a custom localizable object, inherit from the <code>AbstractLocalizable</code> class and implement the <code>
+Localize()</code> method. If necessary, you can override <code>OnEnable()</code> (ensure you call <code>
+base.OnEnable()</code> after your code).
 
 ```csharp
 using UnityEngine;
