@@ -44,7 +44,14 @@ namespace AppLoc.Editor {
 
         private void OnGUI() {
             string currentProjectId = EditorGUILayout.TextField("Project ID", _preferences.id);
-            string currentProjectSecret = EditorGUILayout.PasswordField("Project Secret", _preferences.secret);
+
+            bool isCloud = !string.IsNullOrWhiteSpace(currentProjectId);
+
+            string currentProjectSecret = _preferences.secret;
+
+            if (isCloud) {
+                currentProjectSecret = EditorGUILayout.PasswordField("Project Secret", _preferences.secret);
+            }
 
             if (currentProjectId != _preferences.id || currentProjectSecret != _preferences.secret) {
                 _preferences.id = currentProjectId;
@@ -59,8 +66,20 @@ namespace AppLoc.Editor {
                 EditorGUILayout.HelpBox(_status, _statusType);
             }
 
-            if (GUILayout.Button("Update")) {
-                _window.StartCoroutine(MakeRequest());
+            if (isCloud) {
+                if (GUILayout.Button("Update")) {
+                    _window.StartCoroutine(MakeRequest());
+                }
+            }
+            else {
+                if (GUILayout.Button("Import localization.json")) {
+                    try {
+                        ProcessData(DateTime.Now, File.ReadAllText(EditorUtility.OpenFilePanel("Select localization.json", "Assets", ".json")));
+                    }
+                    catch (Exception exception) {
+                        SetStatus("Error: " + exception.Message, MessageType.Error);
+                    }
+                }
             }
         }
 
@@ -85,77 +104,79 @@ namespace AppLoc.Editor {
                     SetStatus("Api error: " + response.message, MessageType.Error);
                 }
                 else {
-                    string data = response.data;
-
-                    StringBuilder hashBuilder = new StringBuilder();
-
-                    using (SHA256 sha256 = SHA256.Create()) {
-                        byte[] result = sha256.ComputeHash(Encoding.UTF8.GetBytes(data));
-
-                        foreach (byte b in result) {
-                            hashBuilder.Append(b.ToString("x2"));
-                        }
-                    }
-
-                    string hash = hashBuilder.ToString();
-
-                    LocalizationsObject currentLocalizations =
-                        AssetDatabase.LoadAssetAtPath<LocalizationsObject>(LocalizationManager.LocalizationsObjectPath);
-
-                    if (currentLocalizations != null && currentLocalizations.hash == hash) {
-                        SetStatus("Nothing has changed since the last version.", MessageType.Info);
-                    }
-                    else {
-                        try {
-                            SetStatus("Creating " + nameof(LocalizationsObject) + "...", MessageType.Info);
-
-                            Localization apiLocalization = JsonUtility.FromJson<Localization>(data);
-
-                            Dictionary<string, List<AppLoc.Localization.KeyValuePair>> localizations =
-                                new Dictionary<string, List<AppLoc.Localization.KeyValuePair>>();
-
-                            foreach (Localization.LocalizationKey key in apiLocalization.keys) {
-                                foreach (Localization.LocalizationKey.LocalizationValue localization in key.localizations) {
-                                    string code = localization.code;
-
-                                    if (!localizations.ContainsKey(code)) {
-                                        localizations.Add(code, new List<AppLoc.Localization.KeyValuePair>());
-                                    }
-
-                                    localizations[code]
-                                        .Add(new AppLoc.Localization.KeyValuePair { key = key.key, value = localization.value });
-                                }
-                            }
-
-                            LocalizationsObject newLocalization = CreateInstance<LocalizationsObject>();
-
-                            newLocalization.hash = hash;
-
-                            newLocalization.localizations = new AppLoc.Localization[localizations.Keys.Count];
-
-                            for (int i = 0; i < localizations.Keys.Count; i++) {
-                                string code = localizations.Keys.ElementAt(i);
-
-                                newLocalization.localizations[i] = new AppLoc.Localization {
-                                    code = code, keys = localizations[code].ToArray()
-                                };
-                            }
-
-                            AssetDatabase.CreateAsset(newLocalization, LocalizationManager.LocalizationsObjectPath);
-                            AssetDatabase.SaveAssets();
-
-                            SetStatus(string.Format(CultureInfo.InvariantCulture,
-                                "Done in {0:F1}s", DateTime.Now.Subtract(startDateTime).TotalSeconds
-                            ), MessageType.Info);
-                        }
-                        catch (Exception exception) {
-                            SetStatus("Error: " + exception.Message, MessageType.Error);
-                        }
-                    }
+                    ProcessData(startDateTime, response.data);
                 }
             }
             else {
                 SetStatus("Web request error: " + webRequest.error, MessageType.Error);
+            }
+        }
+
+        private void ProcessData(DateTime startDateTime, string data) {
+            StringBuilder hashBuilder = new StringBuilder();
+
+            using (SHA256 sha256 = SHA256.Create()) {
+                byte[] result = sha256.ComputeHash(Encoding.UTF8.GetBytes(data));
+
+                foreach (byte b in result) {
+                    hashBuilder.Append(b.ToString("x2"));
+                }
+            }
+
+            string hash = hashBuilder.ToString();
+
+            LocalizationsObject currentLocalizations =
+                AssetDatabase.LoadAssetAtPath<LocalizationsObject>(LocalizationManager.LocalizationsObjectPath);
+
+            if (currentLocalizations != null && currentLocalizations.hash == hash) {
+                SetStatus("Nothing has changed since the last version.", MessageType.Info);
+            }
+            else {
+                try {
+                    SetStatus("Creating " + nameof(LocalizationsObject) + "...", MessageType.Info);
+
+                    Localization apiLocalization = JsonUtility.FromJson<Localization>(data);
+
+                    Dictionary<string, List<AppLoc.Localization.KeyValuePair>> localizations =
+                        new Dictionary<string, List<AppLoc.Localization.KeyValuePair>>();
+
+                    foreach (Localization.LocalizationKey key in apiLocalization.keys) {
+                        foreach (Localization.LocalizationKey.LocalizationValue localization in key.localizations) {
+                            string code = localization.code;
+
+                            if (!localizations.ContainsKey(code)) {
+                                localizations.Add(code, new List<AppLoc.Localization.KeyValuePair>());
+                            }
+
+                            localizations[code]
+                                .Add(new AppLoc.Localization.KeyValuePair { key = key.key, value = localization.value });
+                        }
+                    }
+
+                    LocalizationsObject newLocalization = CreateInstance<LocalizationsObject>();
+
+                    newLocalization.hash = hash;
+
+                    newLocalization.localizations = new AppLoc.Localization[localizations.Keys.Count];
+
+                    for (int i = 0; i < localizations.Keys.Count; i++) {
+                        string code = localizations.Keys.ElementAt(i);
+
+                        newLocalization.localizations[i] = new AppLoc.Localization {
+                            code = code, keys = localizations[code].ToArray()
+                        };
+                    }
+
+                    AssetDatabase.CreateAsset(newLocalization, LocalizationManager.LocalizationsObjectPath);
+                    AssetDatabase.SaveAssets();
+
+                    SetStatus(string.Format(CultureInfo.InvariantCulture,
+                        "Done in {0:F1}s", DateTime.Now.Subtract(startDateTime).TotalSeconds
+                    ), MessageType.Info);
+                }
+                catch (Exception exception) {
+                    SetStatus("Error: " + exception.Message, MessageType.Error);
+                }
             }
         }
 
