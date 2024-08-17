@@ -2,14 +2,14 @@ using UnityEngine;
 
 namespace AppLoc {
     public abstract class AbstractLocalizable : MonoBehaviour {
-        private bool _initialized;
+        private bool _abstractLocalizableInitialized;
 
         protected virtual void OnEnable() {
-            if (_initialized) {
+            if (_abstractLocalizableInitialized) {
                 return;
             }
 
-            _initialized = true;
+            _abstractLocalizableInitialized = true;
 
             LocalizationManager.OnLocalize += Localize;
             Localize();
