@@ -13,7 +13,7 @@ using Unity.EditorCoroutines.Editor;
 
 namespace AppLoc.Editor {
     public class AppLocWindow : EditorWindow {
-        private const string Url = "https://us-central1-app-translation-acac8.cloudfunctions.net/getProjectData?id={0}&secret={1}";
+        private const string Url = "https://api.apploc.dev/getProjectData?id={0}&secret={1}";
 
         private static AppLocWindow _window;
 

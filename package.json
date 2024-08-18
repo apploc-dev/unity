@@ -1,6 +1,6 @@
 {
     "name": "dev.apploc.unity",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Effortlessly translate text and UI elements, ensuring your app's essence is preserved in every language. Expand your reach to a global audience and build a community of users who understand and appreciate your app.",
     "displayName": "AppLoc for Unity",
     "unity": "2020.3",
