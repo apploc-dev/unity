@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace AppLoc {
@@ -9,7 +8,8 @@ namespace AppLoc {
 
         public static LocalizeEventHandler OnLocalize;
 
-        public const string LocalizationsObjectPath = "Assets/ATLocalizationsObject.asset";
+        internal const string LocalizationsObjectName = "ATLocalizationsObject";
+        internal const string LocalizationsObjectPath = "Assets/Resources/" + LocalizationsObjectName + ".asset";
 
         private static readonly LocalizationsObject LocalizationsObject;
 
@@ -30,7 +30,7 @@ namespace AppLoc {
 
 
         static LocalizationManager() {
-            LocalizationsObject = AssetDatabase.LoadAssetAtPath<LocalizationsObject>(LocalizationsObjectPath);
+            LocalizationsObject = Resources.Load<LocalizationsObject>(LocalizationsObjectName);
 
             LocalizationCodes = new ReadOnlyCollection<string>(
                 LocalizationsObject.localizations.Select(e => e.code).ToArray()

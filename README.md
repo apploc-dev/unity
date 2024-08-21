@@ -19,7 +19,7 @@ Start by pasting your project ID and secret key into the respective fields. Thes
 
 > **Important:** The project secret only grants access to the contents of the project — it does not expose or allow access to any project members or their details. This means you can safely add apploc-prefs.json to your version control system without worrying about sensitive information being compromised.
 
-Click the **Update** button to automatically update or create the <code>Assets/ATLocalizationsObject.asset</code> file.
+Click the **Update** button to automatically update or create the <code>Assets/Resources/ATLocalizationsObject.asset</code> file.
 
 <div align="center">
     <img src="Images/Window.png" alt="AppLoc Plugin Window">
@@ -27,7 +27,7 @@ Click the **Update** button to automatically update or create the <code>Assets/A
 
 ### Initialization and localization selection
 
-Initialization is automatic. By default, the manager attempts to find the localization code "EN". If "EN" does not exist, it selects the first localization by index. You can view localization indices in the <code>Assets/ATLocalizationsObject.asset</code> ScriptableObject.
+Initialization is automatic. By default, the manager attempts to find the localization code "EN". If "EN" does not exist, it selects the first localization by index. You can view localization indices in the <code>Assets/Resources/ATLocalizationsObject.asset</code> ScriptableObject.
 
 ```csharp
 using UnityEngine;

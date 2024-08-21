@@ -1,5 +1,8 @@
+#if UNITY_EDITOR
+
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 
 namespace AppLoc.Localizables.Editor {
     public class LocalizableTextEditor : UnityEditor.Editor {
@@ -8,7 +11,7 @@ namespace AppLoc.Localizables.Editor {
 
         private void OnEnable() {
             _keyProperty = serializedObject.FindProperty("key");
-            _localization = AssetDatabase.LoadAssetAtPath<LocalizationsObject>(LocalizationManager.LocalizationsObjectPath).localizations[0];
+            _localization = Resources.Load<LocalizationsObject>(LocalizationManager.LocalizationsObjectName).localizations[0];
         }
 
         public override void OnInspectorGUI() {
@@ -26,3 +29,5 @@ namespace AppLoc.Localizables.Editor {
         }
     }
 }
+
+#endif

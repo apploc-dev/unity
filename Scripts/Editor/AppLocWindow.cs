@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -167,6 +169,12 @@ namespace AppLoc.Editor {
                         };
                     }
 
+                    string directoryPath = Path.GetDirectoryName(LocalizationManager.LocalizationsObjectPath);
+
+                    if (!Directory.Exists(directoryPath)) {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+                    
                     AssetDatabase.CreateAsset(newLocalization, LocalizationManager.LocalizationsObjectPath);
                     AssetDatabase.SaveAssets();
 
@@ -219,3 +227,5 @@ namespace AppLoc.Editor {
         }
     }
 }
+
+#endif
