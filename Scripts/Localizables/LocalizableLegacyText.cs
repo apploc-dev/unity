@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace AppLoc.Localizables {
     [RequireComponent(typeof(Text))]
     public class LocalizableLegacyText : AbstractLocalizable {
-        [SerializeField] private string key;
+        [SerializeField] [LocalizationKey] private string key;
 
         private bool _initialized;
         private Text _text;

@@ -65,6 +65,7 @@ Built-in localizable objects:
 -   [LocalizableLegacyText](./Scripts/Localizables/LocalizableLegacyText.cs) for UnityEngine.UI.Text
 
 To create a custom localizable object, inherit from the <code>AbstractLocalizable</code> class and implement the <code>Localize()</code> method. If necessary, you can override <code>OnEnable()</code> (ensure you call <code>base.OnEnable()</code> after your code).
+Also, you can use <code>[LocalizationKey]</code> attribute to validate localization keys.
 
 ```csharp
 using UnityEngine;
@@ -72,7 +73,7 @@ using TMPro;
 using AppLoc;
 
 public class LocalizableText : AbstractLocalizable {
-    [SerializeField] private string key;
+    [SerializeField] [LocalizationKey] private string key;
 
     private TMP_Text _text;
 

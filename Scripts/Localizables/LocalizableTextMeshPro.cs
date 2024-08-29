@@ -4,7 +4,7 @@ using TMPro;
 namespace AppLoc.Localizables {
     [RequireComponent(typeof(TMP_Text))]
     public class LocalizableTextMeshPro : AbstractLocalizable {
-        [SerializeField] private string key;
+        [SerializeField] [LocalizationKey] private string key;
 
         private bool _initialized;
         private TMP_Text _text;
