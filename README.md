@@ -7,7 +7,9 @@ The [apploc.dev](https://apploc.dev) plugin for Unity provides seamless localiza
 -   Open Package Manager
 -   Add package from git URL:
     <code>https://github.com/apploc-dev/unity.git</code>
-    > **Note:** This package has been tested on Unity version 2022.3.28 and above. Other versions may work but are not officially supported.
+    
+> [!NOTE]
+> This package has been tested on Unity version 2022.3.28 and above. Other versions may work but are not officially supported.
 
 ## Usage
 
@@ -17,7 +19,8 @@ The plugin window can be opened by clicking on **Window > AppLoc**.
 
 Start by pasting your project ID and secret key into the respective fields. These will be automatically saved to <code>ProjectSettings/apploc-prefs.json</code>.
 
-> **Important:** The project secret only grants access to the contents of the project — it does not expose or allow access to any project members or their details. This means you can safely add apploc-prefs.json to your version control system without worrying about sensitive information being compromised.
+> [!IMPORTANT]
+> The project secret only grants access to the contents of the project — it does not expose or allow access to any project members or their details. This means you can safely add apploc-prefs.json to your version control system without worrying about sensitive information being compromised.
 
 Click the **Update** button to automatically update or create the <code>Assets/Resources/ATLocalizationsObject.asset</code> file.
 
