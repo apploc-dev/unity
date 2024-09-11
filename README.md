@@ -20,7 +20,7 @@ The plugin window can be opened by clicking on **Window > AppLoc**.
 Start by pasting your project ID and secret key into the respective fields. These will be automatically saved to <code>ProjectSettings/apploc-prefs.json</code>.
 
 > [!IMPORTANT]
-> The project secret only grants access to the contents of the project — it does not expose or allow access to any project members or their details. This means you can safely add apploc-prefs.json to your version control system without worrying about sensitive information being compromised.
+> The project secret only grants read access to the contents of the project — it does not expose or allow access to any project members or their details. This means you can safely add apploc-prefs.json to your version control system without worrying about sensitive information being compromised.
 
 Click the **Update** button to automatically update or create the <code>Assets/Resources/ATLocalizationsObject.asset</code> file.
 
