@@ -25,7 +25,7 @@ Start by pasting your project ID and secret key into the respective fields. Thes
 Click the **Update** button to automatically update or create the <code>Assets/Resources/ATLocalizationsObject.asset</code> file.
 
 <div align="center">
-    <img src="Images/Window.png" alt="AppLoc Plugin Window">
+    <img src="Images~/Window.png" alt="AppLoc Plugin Window">
 </div>
 
 ### Initialization and localization selection
