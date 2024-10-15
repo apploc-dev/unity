@@ -20,7 +20,7 @@ namespace AppLoc {
                 }
             }
 
-            return "?";
+            return null;
         }
 
         [Serializable]

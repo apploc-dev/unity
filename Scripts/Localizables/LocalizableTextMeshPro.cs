@@ -1,3 +1,5 @@
+using System;
+using AppLoc.Editor;
 using UnityEngine;
 using TMPro;
 
@@ -22,5 +24,15 @@ namespace AppLoc.Localizables {
         protected override void Localize() {
             _text.text = LocalizationManager.GetValue(key);
         }
+
+#if UNITY_EDITOR
+        private void OnValidate() {
+            string value = Utils.TryGetValue(key);
+
+            if (value != null) {
+                GetComponent<TMP_Text>().text = value;
+            }
+        }
+#endif
     }
 }

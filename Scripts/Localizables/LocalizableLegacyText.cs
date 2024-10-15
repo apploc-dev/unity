@@ -1,3 +1,4 @@
+using AppLoc.Editor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,5 +23,15 @@ namespace AppLoc.Localizables {
         protected override void Localize() {
             _text.text = LocalizationManager.GetValue(key);
         }
+
+#if UNITY_EDITOR
+        private void OnValidate() {
+            string value = Utils.TryGetValue(key);
+
+            if (value != null) {
+                GetComponent<Text>().text = value;
+            }
+        }
+#endif
     }
 }

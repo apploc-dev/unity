@@ -1,21 +1,12 @@
 #if UNITY_EDITOR
 
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 namespace AppLoc.Editor {
     [CustomPropertyDrawer(typeof(LocalizationKeyAttribute))]
     public class LocalizationKeyDrawer : PropertyDrawer {
-        private Localization _localization;
-        private bool _isInitialized;
-
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-            if (!_isInitialized) {
-                _localization = Resources.Load<LocalizationsObject>(LocalizationManager.LocalizationsObjectName).localizations[0];
-                _isInitialized = true;
-            }
-
             float lineHeight = EditorGUIUtility.singleLineHeight;
             float spacing = EditorGUIUtility.standardVerticalSpacing;
 
@@ -32,22 +23,20 @@ namespace AppLoc.Editor {
             if (string.IsNullOrEmpty(property.stringValue)) {
                 EditorGUI.HelpBox(helpBoxPosition, "Key is empty", MessageType.Warning);
             }
-            else if (_localization.keys.All(e => e.key != property.stringValue)) {
-                EditorGUI.HelpBox(helpBoxPosition, $"Key '{property.stringValue}' not found", MessageType.Warning);
+            else {
+                string value = Utils.TryGetValue(property.stringValue);
+
+                if (value == null) {
+                    EditorGUI.HelpBox(helpBoxPosition, $"Key '{property.stringValue}' not found", MessageType.Warning);
+                }
+                else {
+                    EditorGUI.HelpBox(helpBoxPosition, value, MessageType.Info);
+                }
             }
         }
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-            float lineHeight = EditorGUIUtility.singleLineHeight;
-            float spacing = EditorGUIUtility.standardVerticalSpacing;
-            float helpBoxHeight = lineHeight * 2;
-
-            bool shouldShowHelpBox = property.propertyType != SerializedPropertyType.String ||
-                                     string.IsNullOrEmpty(property.stringValue) ||
-                                     (_localization != null && _localization.keys.All(e => e.key != property.stringValue));
-
-            return lineHeight + (shouldShowHelpBox ? helpBoxHeight + spacing : 0);
-        }
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
+            EditorGUIUtility.singleLineHeight * 3 + EditorGUIUtility.standardVerticalSpacing;
     }
 }
 
